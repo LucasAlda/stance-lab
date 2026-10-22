@@ -1,0 +1,25 @@
+[Unit]
+Description=Stance Lab - Wii Balance Board
+After=network.target bluetooth.service
+Wants=bluetooth.service
+
+[Service]
+Type=simple
+# Replace these paths and account with your installation.
+User=pi
+WorkingDirectory=/home/pi/stance-lab
+Environment=NODE_ENV=production
+Environment=SOURCE=wii
+Environment=PORT=3000
+Environment=HOST=0.0.0.0
+Environment=PYTHON_BIN=/home/pi/stance-lab/.venv/bin/python
+Environment=DATA_DIR=/home/pi/stance-lab/data
+EnvironmentFile=-/home/pi/stance-lab/.env
+# Use the actual Node path from `command -v node` (not an interactive nvm alias).
+ExecStart=/usr/bin/node --import tsx server/index.ts --production
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
